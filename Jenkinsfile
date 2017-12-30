@@ -12,7 +12,7 @@ node('master') {
         
         stage('build') {
             
-            app = docker.build("rahulevhive/demo")
+            app = docker.build("users-devcon")
             
         }
 
@@ -23,7 +23,7 @@ node('master') {
 
         stage('deploy') {
             
-            docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+            docker.withRegistry('150177431474.dkr.ecr.ap-southeast-1.amazonaws.com/users-devcon', 'aws-ec2') {
                 app.push("${env.BUILD_NUMBER}")
                 app.push("latest")
             }
