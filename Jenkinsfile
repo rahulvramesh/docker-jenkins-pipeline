@@ -23,7 +23,7 @@ node('master') {
 
         stage('deploy') {
             
-            docker.withRegistry('https://registry.hub.docker.com', '9d4c9d4d-61c4-476b-aad1-f34145ecfa9c') {
+            docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
                 app.push("${env.BUILD_NUMBER}")
                 app.push("latest")
             }
