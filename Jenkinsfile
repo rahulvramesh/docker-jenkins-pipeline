@@ -1,13 +1,19 @@
 #!groovy
 
 node('master') {
+    
+    def app
+    
     try {
-        stage('build') {
+        
+        stage('Checkout SCM') {
             checkout scm
-
-            //sh "composer install"
-           // sh "cp .env.example .env"
-            //sh "php artisan key:generate"
+        }
+        
+        stage('build') {
+            
+            app = docker.build("rahulevhive/demo")
+            
         }
 
         stage('test') {
@@ -16,8 +22,12 @@ node('master') {
         }
 
         stage('deploy') {
-            // ansible-playbook -i ./ansible/hosts ./ansible/deploy.yml
-            sh "echo 'WE ARE DEPLOYING'"
+            
+            docker.withRegistry('https://registry.hub.docker.com', '9d4c9d4d-61c4-476b-aad1-f34145ecfa9c') {
+                app.push("${env.BUILD_NUMBER}")
+                app.push("latest")
+            }
+            
         }
     } catch(error) {
         throw error
